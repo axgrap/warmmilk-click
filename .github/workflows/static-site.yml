@@ -1,0 +1,109 @@
+name: Generate Static Site
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  workflow_dispatch:
+  repository_dispatch:
+    types: [project-updated]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch all history for all branches and tags
+      
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Install PyYAML
+        run: pip install pyyaml
+      
+      - name: Checkout external project repositories
+        run: |
+          # Parse projects.yml and checkout each external repository
+          python << 'PYTHON_SCRIPT'
+          import yaml
+          import subprocess
+          import os
+          
+          # Load projects configuration
+          if os.path.exists('projects.yml'):
+              with open('projects.yml', 'r') as f:
+                  config = yaml.safe_load(f)
+              
+              if config and 'projects' in config and config['projects']:
+                  os.makedirs('external-projects', exist_ok=True)
+                  
+                  for project in config['projects']:
+                      if not project:  # Skip empty entries
+                          continue
+                      
+                      name = project.get('name')
+                      repository = project.get('repository')
+                      branch = project.get('branch', '')
+                      
+                      if not name or not repository:
+                          print(f"Skipping invalid project entry: {project}")
+                          continue
+                      
+                      print(f"Checking out {repository} as {name}...")
+                      
+                      # Clone the repository
+                      clone_cmd = ['git', 'clone']
+                      if branch:
+                          clone_cmd.extend(['--branch', branch])
+                      clone_cmd.extend(['--depth', '0'])  # Full history for temporal data
+                      clone_cmd.append(f'https://github.com/{repository}.git')
+                      clone_cmd.append(f'external-projects/{name}')
+                      
+                      try:
+                          subprocess.run(clone_cmd, check=True)
+                          print(f"Successfully checked out {name}")
+                      except subprocess.CalledProcessError as e:
+                          print(f"Failed to checkout {name}: {e}")
+              else:
+                  print("No projects configured in projects.yml")
+          else:
+              print("projects.yml not found - no external projects to checkout")
+          PYTHON_SCRIPT
+      
+      - name: Generate temporal data
+        run: |
+          python scripts/generate-temporal-data.py . dist/temporal-data.json
+      
+      - name: Copy index.html template
+        run: |
+          cp src/index.html dist/index.html
+      
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

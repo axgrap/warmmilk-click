@@ -1,0 +1,228 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Project Temporal Data Model",
+  "description": "Schema for storing commit history and file blame information for temporal views",
+  "type": "object",
+  "properties": {
+    "projects": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Project name"
+          },
+          "path": {
+            "type": "string",
+            "description": "Path to the project directory"
+          },
+          "commits": {
+            "type": "array",
+            "description": "All commits in the repository",
+            "items": {
+              "type": "object",
+              "properties": {
+                "sha": {
+                  "type": "string",
+                  "description": "Commit SHA hash"
+                },
+                "author": {
+                  "type": "string",
+                  "description": "Commit author name"
+                },
+                "email": {
+                  "type": "string",
+                  "description": "Commit author email"
+                },
+                "date": {
+                  "type": "string",
+                  "format": "date-time",
+                  "description": "Commit timestamp"
+                },
+                "message": {
+                  "type": "string",
+                  "description": "Commit message"
+                },
+                "files": {
+                  "type": "array",
+                  "description": "Files changed in this commit",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "required": ["sha", "author", "date", "message"]
+            }
+          },
+          "clickFile": {
+            "type": "object",
+            "description": "Information about the click.md file",
+            "properties": {
+              "path": {
+                "type": "string",
+                "description": "Path to click.md relative to project"
+              },
+              "commits": {
+                "type": "array",
+                "description": "Commits that modified click.md",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "sha": {
+                      "type": "string"
+                    },
+                    "author": {
+                      "type": "string"
+                    },
+                    "email": {
+                      "type": "string"
+                    },
+                    "date": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["sha", "author", "date", "message"]
+                }
+              },
+              "blameHistory": {
+                "type": "array",
+                "description": "Complete blame information for each line range",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "lineStart": {
+                      "type": "integer",
+                      "description": "Starting line number of the range"
+                    },
+                    "lineEnd": {
+                      "type": "integer",
+                      "description": "Ending line number of the range"
+                    },
+                    "commit": {
+                      "type": "string",
+                      "description": "Commit SHA responsible for this line range"
+                    },
+                    "author": {
+                      "type": "string",
+                      "description": "Author of the commit"
+                    },
+                    "email": {
+                      "type": "string",
+                      "description": "Email of the author"
+                    },
+                    "date": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "Date of the commit"
+                    },
+                    "content": {
+                      "type": "string",
+                      "description": "Content of the line range"
+                    },
+                    "originalLineStart": {
+                      "type": "integer",
+                      "description": "Original line number in the commit that introduced this line"
+                    }
+                  },
+                  "required": ["lineStart", "lineEnd", "commit", "author", "date", "content"]
+                }
+              },
+              "currentContent": {
+                "type": "string",
+                "description": "Current content of the click.md file"
+              },
+              "images": {
+                "type": "array",
+                "description": "Images referenced in click.md that have been copied to assets",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "source": {
+                      "type": "string",
+                      "description": "Original image path in the markdown"
+                    },
+                    "destination": {
+                      "type": "string",
+                      "description": "Path in the assets directory relative to dist"
+                    },
+                    "fullPath": {
+                      "type": "string",
+                      "description": "Full filesystem path to the copied image"
+                    },
+                    "currentSize": {
+                      "type": "integer",
+                      "description": "Current file size in bytes"
+                    },
+                    "versionCount": {
+                      "type": "integer",
+                      "description": "Number of versions/iterations of this image"
+                    },
+                    "versions": {
+                      "type": "array",
+                      "description": "Complete history of changes to this image",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "sha": {
+                            "type": "string",
+                            "description": "Commit SHA where this version was introduced"
+                          },
+                          "author": {
+                            "type": "string",
+                            "description": "Author who made this change"
+                          },
+                          "email": {
+                            "type": "string",
+                            "description": "Email of the author"
+                          },
+                          "date": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "Date of this version"
+                          },
+                          "message": {
+                            "type": "string",
+                            "description": "Commit message describing this change"
+                          },
+                          "size": {
+                            "type": "integer",
+                            "description": "File size in bytes at this version"
+                          }
+                        },
+                        "required": ["sha", "author", "date", "message"]
+                      }
+                    }
+                  },
+                  "required": ["source", "destination"]
+                }
+              }
+            },
+            "required": ["path"]
+          }
+        },
+        "required": ["name", "path", "commits"]
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "generatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "When this data was generated"
+        },
+        "version": {
+          "type": "string",
+          "description": "Schema version"
+        }
+      },
+      "required": ["generatedAt", "version"]
+    }
+  },
+  "required": ["projects", "metadata"]
+}

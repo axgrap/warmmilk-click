@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Warmmilk Click Client Library Example</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        h1 {
+            color: #333;
+        }
+        .section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .project-card {
+            border: 1px solid #e0e0e0;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 4px;
+            border-left: 4px solid #0066cc;
+        }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin: 10px 0;
+        }
+        .stat {
+            background: #f0f0f0;
+            padding: 10px;
+            border-radius: 4px;
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #0066cc;
+        }
+        .stat-label {
+            font-size: 12px;
+            color: #666;
+        }
+        .commit-item {
+            padding: 8px;
+            margin: 5px 0;
+            background: #f9f9f9;
+            border-radius: 3px;
+            font-size: 14px;
+        }
+        .sha {
+            font-family: monospace;
+            color: #0066cc;
+            font-size: 12px;
+        }
+        .image-item {
+            padding: 10px;
+            margin: 10px 0;
+            background: #f9f9f9;
+            border-radius: 4px;
+            border-left: 3px solid #28a745;
+        }
+        .version-badge {
+            display: inline-block;
+            background: #0066cc;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-size: 11px;
+            margin-left: 5px;
+        }
+        code {
+            background: #f0f0f0;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+        .error {
+            background: #ffebee;
+            color: #d32f2f;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>🥛 Warmmilk Click Client Library Example</h1>
+    
+    <div class="section">
+        <h2>Getting Started</h2>
+        <p>This page demonstrates the Warmmilk Click client library. Open the browser console to see API examples.</p>
+        <p>The client library is loaded and available as <code>window.WarmmilkClickClient</code></p>
+    </div>
+
+    <div id="loading" class="loading">Loading temporal data...</div>
+    <div id="error" class="error" style="display: none;"></div>
+    <div id="content" style="display: none;">
+        <div class="section">
+            <h2>Projects Overview</h2>
+            <div id="projects"></div>
+        </div>
+
+        <div class="section">
+            <h2>Recent Commits</h2>
+            <div id="commits"></div>
+        </div>
+
+        <div class="section">
+            <h2>Image Assets</h2>
+            <div id="images"></div>
+        </div>
+
+        <div class="section">
+            <h2>API Examples</h2>
+            <p>Open the browser console and try these commands:</p>
+            <ul>
+                <li><code>client.getProjects()</code> - Get all projects</li>
+                <li><code>client.getProject('example')</code> - Get a specific project</li>
+                <li><code>client.getAllCommits()</code> - Get all commits</li>
+                <li><code>client.searchCommits('image')</code> - Search commits</li>
+                <li><code>project.getStats()</code> - Get project statistics</li>
+                <li><code>project.getImages()</code> - Get all images</li>
+                <li><code>image.getVersions()</code> - Get image version history</li>
+            </ul>
+        </div>
+    </div>
+
+    <script src="../src/warmmilk-click-client.js"></script>
+    <script>
+        let client;
+        let project;
+        let image;
+
+        async function init() {
+            try {
+                // Create client instance
+                client = new WarmmilkClickClient('../dist/temporal-data.json');
+                
+                // Load data
+                await client.load();
+                
+                // Make available in console
+                window.client = client;
+                
+                // Hide loading, show content
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('content').style.display = 'block';
+                
+                // Render data
+                renderProjects();
+                renderCommits();
+                renderImages();
+                
+                // Log to console
+                console.log('✅ Warmmilk Click client loaded successfully!');
+                console.log('Try these commands:');
+                console.log('  client.getProjects()');
+                console.log('  client.getAllCommits()');
+                console.log('  client.searchCommits("your search")');
+                console.log('\nClient instance is available as "client" variable');
+                
+                // Store first project and image for console access
+                const projects = client.getProjects();
+                if (projects.length > 0) {
+                    project = projects[0];
+                    window.project = project;
+                    console.log('\nFirst project available as "project" variable');
+                    
+                    const images = project.getImages();
+                    if (images.length > 0) {
+                        image = images[0];
+                        window.image = image;
+                        console.log('First image available as "image" variable');
+                    }
+                }
+                
+            } catch (error) {
+                document.getElementById('loading').style.display = 'none';
+                const errorDiv = document.getElementById('error');
+                errorDiv.textContent = `Error: ${error.message}`;
+                errorDiv.style.display = 'block';
+                console.error('Failed to load:', error);
+            }
+        }
+
+        function renderProjects() {
+            const container = document.getElementById('projects');
+            const projects = client.getProjects();
+            
+            if (projects.length === 0) {
+                container.innerHTML = '<p>No projects found.</p>';
+                return;
+            }
+            
+            projects.forEach(project => {
+                const stats = project.getStats();
+                
+                const card = document.createElement('div');
+                card.className = 'project-card';
+                card.innerHTML = `
+                    <h3>${project.name}</h3>
+                    <p><strong>Path:</strong> ${project.path}</p>
+                    <div class="stats">
+                        <div class="stat">
+                            <div class="stat-value">${stats.totalCommits}</div>
+                            <div class="stat-label">Total Commits</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value">${stats.clickFileCommits}</div>
+                            <div class="stat-label">Click.md Commits</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value">${stats.totalImages}</div>
+                            <div class="stat-label">Images</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value">${stats.linesTracked}</div>
+                            <div class="stat-label">Lines Tracked</div>
+                        </div>
+                    </div>
+                    <p><strong>Authors:</strong> ${stats.authors.join(', ')}</p>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function renderCommits() {
+            const container = document.getElementById('commits');
+            const commits = client.getAllCommits().slice(0, 10); // Show first 10
+            
+            if (commits.length === 0) {
+                container.innerHTML = '<p>No commits found.</p>';
+                return;
+            }
+            
+            container.innerHTML = `<p>Showing ${commits.length} most recent commits</p>`;
+            
+            commits.forEach(commit => {
+                const div = document.createElement('div');
+                div.className = 'commit-item';
+                div.innerHTML = `
+                    <span class="sha">${commit.getShortSha()}</span>
+                    <strong>${commit.message}</strong><br>
+                    <small>${commit.author} - ${commit.getFormattedDate()}</small>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function renderImages() {
+            const container = document.getElementById('images');
+            const allImages = [];
+            
+            client.getProjects().forEach(project => {
+                project.getImages().forEach(image => {
+                    allImages.push({ project: project.name, image });
+                });
+            });
+            
+            if (allImages.length === 0) {
+                container.innerHTML = '<p>No images found.</p>';
+                return;
+            }
+            
+            allImages.forEach(({ project, image }) => {
+                const div = document.createElement('div');
+                div.className = 'image-item';
+                
+                let versionsHtml = '';
+                if (image.hasMultipleVersions()) {
+                    const stats = image.getVersionStats();
+                    versionsHtml = `
+                        <p><strong>Version History:</strong></p>
+                        <ul>
+                            ${image.getVersions().map((v, idx) => `
+                                <li>v${image.versionCount - idx}: ${v.getShortSha()} - ${v.getFormattedDate()} 
+                                    (${v.getFormattedSize()}) by ${v.author}</li>
+                            `).join('')}
+                        </ul>
+                        <p><small>Size change: ${stats.sizeChange > 0 ? '+' : ''}${stats.sizeChange} bytes</small></p>
+                    `;
+                }
+                
+                div.innerHTML = `
+                    <strong>${project}:</strong> ${image.source}
+                    <span class="version-badge">${image.versionCount} version${image.versionCount > 1 ? 's' : ''}</span>
+                    <br>
+                    <small>Current size: ${image.getFormattedSize()}</small>
+                    ${versionsHtml}
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        // Initialize when page loads
+        init();
+    </script>
+</body>
+</html>

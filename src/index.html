@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Warmmilk Click - Temporal Project Views</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        header {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            margin: 0 0 10px 0;
+            color: #333;
+        }
+        .subtitle {
+            color: #666;
+            font-size: 14px;
+        }
+        .content {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-size: 16px;
+            color: #666;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+        .tab:hover {
+            color: #333;
+        }
+        .tab.active {
+            color: #0066cc;
+            border-bottom-color: #0066cc;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .project {
+            margin-bottom: 30px;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 4px;
+            border-left: 4px solid #0066cc;
+        }
+        .project-name {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        .project-images {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #666;
+        }
+        .project-images ul {
+            margin: 5px 0;
+        }
+        .version-history {
+            margin: 8px 0;
+            padding-left: 20px;
+            font-size: 12px;
+        }
+        .version-item {
+            margin: 5px 0;
+            padding: 8px;
+            background: #f5f5f5;
+            border-radius: 3px;
+            border-left: 3px solid #0066cc;
+        }
+        .version-num {
+            display: inline-block;
+            background: #0066cc;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 11px;
+            font-weight: bold;
+            margin-right: 5px;
+        }
+        .version-sha {
+            font-family: monospace;
+            color: #666;
+            font-size: 11px;
+            margin-right: 8px;
+        }
+        .version-date {
+            color: #666;
+            font-size: 11px;
+            margin-right: 8px;
+        }
+        .version-author {
+            color: #0066cc;
+            font-size: 11px;
+        }
+        .version-message {
+            margin-top: 4px;
+            color: #666;
+            font-size: 11px;
+            font-style: italic;
+        }
+        .commit {
+            padding: 10px;
+            margin: 5px 0;
+            background: white;
+            border-radius: 4px;
+            border-left: 3px solid #28a745;
+        }
+        .commit-sha {
+            font-family: monospace;
+            color: #0066cc;
+            font-size: 12px;
+        }
+        .commit-message {
+            font-weight: bold;
+            margin: 5px 0;
+        }
+        .commit-meta {
+            font-size: 12px;
+            color: #666;
+        }
+        .blame-line {
+            padding: 5px;
+            margin: 2px 0;
+            background: white;
+            border-radius: 2px;
+            font-family: monospace;
+            font-size: 12px;
+            display: grid;
+            grid-template-columns: 40px 100px 200px 1fr;
+            gap: 10px;
+        }
+        .line-num {
+            color: #999;
+        }
+        .blame-author {
+            color: #0066cc;
+            font-size: 11px;
+        }
+        .blame-date {
+            color: #666;
+            font-size: 11px;
+        }
+        .line-content {
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+        .markdown-content {
+            margin: 15px 0;
+            padding: 15px;
+            background: white;
+            border-radius: 4px;
+        }
+        .markdown-content img {
+            max-width: 200px;
+            height: auto;
+            margin: 10px 0;
+        }
+        .error {
+            color: #d32f2f;
+            padding: 10px;
+            background: #ffebee;
+            border-radius: 4px;
+        }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .stat-card {
+            padding: 15px;
+            background: #e3f2fd;
+            border-radius: 4px;
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 32px;
+            font-weight: bold;
+            color: #0066cc;
+        }
+        .stat-label {
+            font-size: 14px;
+            color: #666;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Warmmilk Click</h1>
+        <div class="subtitle">Temporal Project Views - Track and visualize project evolution over time</div>
+    </header>
+    
+    <div class="content">
+        <div id="loading">Loading temporal data...</div>
+        <div id="error" class="error" style="display: none;"></div>
+        <div id="app" style="display: none;"></div>
+    </div>
+    
+    <script>
+        let temporalData = null;
+        
+        async function loadData() {
+            try {
+                const response = await fetch('temporal-data.json');
+                if (!response.ok) {
+                    throw new Error('Failed to load temporal data');
+                }
+                temporalData = await response.json();
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('app').style.display = 'block';
+                renderApp();
+            } catch (error) {
+                document.getElementById('loading').style.display = 'none';
+                const errorDiv = document.getElementById('error');
+                errorDiv.textContent = 'Error loading data: ' + error.message;
+                errorDiv.style.display = 'block';
+            }
+        }
+        
+        function formatBytes(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
+        }
+        
+        function renderMarkdown(content, projectName) {
+            // Simple markdown to HTML conversion for images
+            let html = content;
+            // Convert markdown images to HTML with assets path
+            html = html.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, (match, alt, src) => {
+                // Check if it's a relative path
+                if (!src.startsWith('http://') && !src.startsWith('https://') && !src.startsWith('//')) {
+                    // Images are in assets/projectName/ directory
+                    return `<img src="assets/${projectName}/${src}" alt="${alt}" />`;
+                }
+                return `<img src="${src}" alt="${alt}" />`;
+            });
+            // Convert line breaks to <br>
+            html = html.replace(/\n/g, '<br>');
+            return html;
+        }
+        
+        function renderApp() {
+            const app = document.getElementById('app');
+            
+            if (!temporalData.projects || temporalData.projects.length === 0) {
+                app.innerHTML = '<p>No projects found. Add projects with click.md files to the projects/ directory.</p>';
+                return;
+            }
+            
+            app.innerHTML = `
+                <div class="stats">
+                    <div class="stat-card">
+                        <div class="stat-value">${temporalData.projects.length}</div>
+                        <div class="stat-label">Projects</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">${temporalData.projects[0]?.commits?.length || 0}</div>
+                        <div class="stat-label">Total Commits</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">${new Date(temporalData.metadata.generatedAt).toLocaleDateString()}</div>
+                        <div class="stat-label">Last Updated</div>
+                    </div>
+                </div>
+                
+                <div class="tabs">
+                    <button class="tab active" onclick="switchTab('projects')">Projects</button>
+                    <button class="tab" onclick="switchTab('commits')">All Commits</button>
+                    <button class="tab" onclick="switchTab('temporal')">Temporal View</button>
+                </div>
+                
+                <div id="tab-projects" class="tab-content active"></div>
+                <div id="tab-commits" class="tab-content"></div>
+                <div id="tab-temporal" class="tab-content"></div>
+            `;
+            
+            renderProjects();
+            renderCommits();
+            renderTemporal();
+        }
+        
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById('tab-' + tabName).classList.add('active');
+        }
+        
+        function renderProjects() {
+            const container = document.getElementById('tab-projects');
+            let html = '<h2>Projects</h2>';
+            
+            temporalData.projects.forEach(project => {
+                const clickCommits = project.clickFile?.commits?.length || 0;
+                const blameLines = project.clickFile?.blameHistory?.length || 0;
+                const images = project.clickFile?.images?.length || 0;
+                
+                html += `
+                    <div class="project">
+                        <div class="project-name">${project.name}</div>
+                        <div><strong>Path:</strong> ${project.path}</div>
+                        <div><strong>Click.md commits:</strong> ${clickCommits}</div>
+                        <div><strong>Lines tracked:</strong> ${blameLines}</div>
+                        <div><strong>Images:</strong> ${images}</div>
+                `;
+                
+                // Display images if available
+                if (project.clickFile?.images && project.clickFile.images.length > 0) {
+                    html += '<div class="project-images"><strong>Image assets:</strong><ul>';
+                    project.clickFile.images.forEach(img => {
+                        const versionInfo = img.versionCount ? ` (${img.versionCount} version${img.versionCount > 1 ? 's' : ''})` : '';
+                        const sizeInfo = img.currentSize ? ` - ${formatBytes(img.currentSize)}` : '';
+                        html += `<li>${img.source} → assets/${img.destination}${versionInfo}${sizeInfo}`;
+                        
+                        // Show version history if available
+                        if (img.versions && img.versions.length > 0) {
+                            html += '<ul class="version-history">';
+                            img.versions.forEach((ver, idx) => {
+                                const sizeChange = ver.size ? ` (${formatBytes(ver.size)})` : '';
+                                html += `<li class="version-item">
+                                    <span class="version-num">v${img.versions.length - idx}</span>
+                                    <span class="version-sha">${ver.sha.substring(0, 7)}</span>
+                                    <span class="version-date">${new Date(ver.date).toLocaleDateString()}</span>
+                                    <span class="version-author">${ver.author}</span>
+                                    ${sizeChange}
+                                    <div class="version-message">${ver.message}</div>
+                                </li>`;
+                            });
+                            html += '</ul>';
+                        }
+                        
+                        html += '</li>';
+                    });
+                    html += '</ul></div>';
+                }
+                
+                // Display markdown content with images
+                if (project.clickFile?.currentContent) {
+                    html += `
+                        <div class="markdown-content">
+                            <strong>Current content:</strong><br>
+                            ${renderMarkdown(project.clickFile.currentContent, project.name)}
+                        </div>
+                    `;
+                }
+                
+                html += `</div>`;
+            });
+            
+            container.innerHTML = html;
+        }
+        
+        function renderCommits() {
+            const container = document.getElementById('tab-commits');
+            let html = '<h2>All Commits</h2>';
+            
+            if (temporalData.projects.length > 0) {
+                const commits = temporalData.projects[0].commits;
+                commits.forEach(commit => {
+                    html += `
+                        <div class="commit">
+                            <div class="commit-sha">${commit.sha.substring(0, 8)}</div>
+                            <div class="commit-message">${commit.message}</div>
+                            <div class="commit-meta">
+                                ${commit.author} &lt;${commit.email}&gt; - ${new Date(commit.date).toLocaleString()}
+                            </div>
+                            ${commit.files ? `<div class="commit-meta">Files: ${commit.files.join(', ')}</div>` : ''}
+                        </div>
+                    `;
+                });
+            }
+            
+            container.innerHTML = html;
+        }
+        
+        function renderTemporal() {
+            const container = document.getElementById('tab-temporal');
+            let html = '<h2>Temporal View (Blame History)</h2>';
+            
+            temporalData.projects.forEach(project => {
+                if (project.clickFile && project.clickFile.blameHistory) {
+                    html += `
+                        <div class="project">
+                            <div class="project-name">${project.name} - click.md Evolution</div>
+                            <p><strong>Current content with line-by-line history:</strong></p>
+                    `;
+                    
+                    project.clickFile.blameHistory.forEach(blame => {
+                        html += `
+                            <div class="blame-line">
+                                <div class="line-num">${blame.lineStart}</div>
+                                <div class="blame-author">${blame.author}</div>
+                                <div class="blame-date">${new Date(blame.date).toLocaleDateString()}</div>
+                                <div class="line-content">${blame.content || '(empty line)'}</div>
+                            </div>
+                        `;
+                    });
+                    
+                    html += `</div>`;
+                }
+            });
+            
+            container.innerHTML = html;
+        }
+        
+        loadData();
+    </script>
+</body>
+</html>

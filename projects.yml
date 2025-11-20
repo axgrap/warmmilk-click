@@ -1,0 +1,12 @@
+# Configuration for external project repositories
+# Each project is a separate git repository that will be checked out during the build
+projects:
+  # Example configuration (replace with your actual repositories):
+  # - name: my-project-name
+  #   repository: owner/repo-name
+  #   branch: main  # optional, defaults to the default branch
+  
+  # Uncomment and modify the example below:
+  # - name: example-project
+  #   repository: axgrap/example-project
+  #   branch: main
