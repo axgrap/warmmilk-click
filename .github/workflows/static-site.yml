@@ -25,16 +25,16 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Fetch all history for all branches and tags
-      
+          fetch-depth: 0 # Fetch all history for all branches and tags
+
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
-      
+          python-version: "3.11"
+
       - name: Install PyYAML
         run: pip install pyyaml
-      
+
       - name: Checkout external project repositories
         run: |
           # Parse projects.yml and checkout each external repository
@@ -42,7 +42,7 @@ jobs:
           import yaml
           import subprocess
           import os
-          
+
           # Load projects configuration
           if os.path.exists('projects.yml'):
               with open('projects.yml', 'r') as f:
@@ -83,15 +83,20 @@ jobs:
           else:
               print("projects.yml not found - no external projects to checkout")
           PYTHON_SCRIPT
-      
+
       - name: Generate temporal data
         run: |
           python scripts/generate-temporal-data.py . dist/temporal-data.json
-      
-      - name: Copy index.html template
+
+      - name: Copy site files
         run: |
           cp src/index.html dist/index.html
-      
+          cp src/click.css dist/click.css
+          cp src/morph.js dist/morph.js
+          cp src/boiler.js dist/boiler.js
+          cp src/warmmilk-click-client.js dist/warmmilk-click-client.js
+          cp -r src/svg dist/
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:

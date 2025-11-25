@@ -1,0 +1,59 @@
+<svg
+  width="100%"
+  height="60"
+  viewBox="0 0 600 60"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <!-- W -->
+  <path id="line-1" d="M20 15 L30 45" stroke="#333" stroke-width="2" fill="none" vector-effect="non-scaling-stroke" />
+  <path id="line-2" d="M30 45 L40 30" stroke="#333" stroke-width="2" fill="none" vector-effect="non-scaling-stroke" />
+  <path id="line-3" d="M40 30 L50 45" stroke="#333" stroke-width="2" fill="none" vector-effect="non-scaling-stroke" />
+  <path id="line-4" d="M50 45 L60 15" stroke="#333" stroke-width="2" fill="none" vector-effect="non-scaling-stroke" />
+  <!-- a -->
+  <path id="line-5" d="M80 25 L80 45" stroke="#333" stroke-width="2" fill="none" vector-effect="non-scaling-stroke" />
+  <path id="line-6" d="M80 25 L100 25" stroke="#333" stroke-width="2" fill="none" vector-effect="non-scaling-stroke" />
+  <path id="line-7" d="M100 25 L100 45" stroke="#333" stroke-width="2" fill="none" vector-effect="non-scaling-stroke" />
+  <path id="line-8" d="M80 35 L100 35" stroke="#333" stroke-width="2" fill="none" vector-effect="non-scaling-stroke" />
+  <!-- r -->
+  <path id="line-9" d="M120 25 L120 45" stroke="#333" stroke-width="2" fill="none" vector-effect="non-scaling-stroke" />
+  <path id="line-10" d="M120 25 L135 25" stroke="#333" stroke-width="2" fill="none" vector-effect="non-scaling-stroke" />
+  <!-- m -->
+  <path id="line-11" d="M155 45 L155 25" stroke="#333" stroke-width="2" fill="none" vector-effect="non-scaling-stroke" />
+  <path id="line-12" d="M155 25 L165 35" stroke="#333" stroke-width="2" fill="none" vector-effect="non-scaling-stroke" />
+  <path id="line-13" d="M165 35 L165 45" stroke="#333" stroke-width="2" fill="none" vector-effect="non-scaling-stroke" />
+  <path id="line-14" d="M165 25 L175 35" stroke="#333" stroke-width="2" fill="none" vector-effect="non-scaling-stroke" />
+  <path id="line-15" d="M175 35 L175 45" stroke="#333" stroke-width="2" fill="none" vector-effect="non-scaling-stroke" />
+  <!-- m -->
+  <path id="line-16" d="M190 45 L190 25" stroke="#333" stroke-width="2" fill="none" vector-effect="non-scaling-stroke" />
+  <path id="line-17" d="M190 25 L200 35" stroke="#333" stroke-width="2" fill="none" vector-effect="non-scaling-stroke" />
+  <path id="line-18" d="M200 35 L200 45" stroke="#333" stroke-width="2" fill="none" vector-effect="non-scaling-stroke" />
+  <path id="line-19" d="M200 25 L210 35" stroke="#333" stroke-width="2" fill="none" vector-effect="non-scaling-stroke" />
+  <path id="line-20" d="M210 35 L210 45" stroke="#333" stroke-width="2" fill="none" vector-effect="non-scaling-stroke" />
+  <!-- i -->
+  <path id="line-21" d="M225 25 L225 45" stroke="#333" stroke-width="2" fill="none" vector-effect="non-scaling-stroke" />
+  <path id="line-22" d="M225 18 L225 20" stroke="#333" stroke-width="2" fill="none" vector-effect="non-scaling-stroke" />
+  <!-- l -->
+  <path id="line-23" d="M240 15 L240 45" stroke="#333" stroke-width="2" fill="none" vector-effect="non-scaling-stroke" />
+  <!-- k -->
+  <path id="line-24" d="M255 15 L255 45" stroke="#333" stroke-width="2" fill="none" vector-effect="non-scaling-stroke" />
+  <path id="line-25" d="M255 35 L270 25" stroke="#333" stroke-width="2" fill="none" vector-effect="non-scaling-stroke" />
+  <path id="line-26" d="M255 35 L270 45" stroke="#333" stroke-width="2" fill="none" vector-effect="non-scaling-stroke" />
+
+  <!-- C -->
+  <path id="line-27" d="M305 15 L285 15" stroke="#333" stroke-width="2" fill="none" vector-effect="non-scaling-stroke" />
+  <path id="line-28" d="M285 15 L285 45" stroke="#333" stroke-width="2" fill="none" vector-effect="non-scaling-stroke" />
+  <path id="line-29" d="M285 45 L305 45" stroke="#333" stroke-width="2" fill="none" vector-effect="non-scaling-stroke" />
+  <!-- l -->
+  <path id="line-30" d="M320 15 L320 45" stroke="#333" stroke-width="2" fill="none" vector-effect="non-scaling-stroke" />
+  <!-- i -->
+  <path id="line-31" d="M335 25 L335 45" stroke="#333" stroke-width="2" fill="none" vector-effect="non-scaling-stroke" />
+  <path id="line-32" d="M335 18 L335 20" stroke="#333" stroke-width="2" fill="none" vector-effect="non-scaling-stroke" />
+  <!-- c -->
+  <path id="line-33" d="M370 25 L350 25" stroke="#333" stroke-width="2" fill="none" vector-effect="non-scaling-stroke" />
+  <path id="line-34" d="M350 25 L350 45" stroke="#333" stroke-width="2" fill="none" vector-effect="non-scaling-stroke" />
+  <path id="line-35" d="M370 45 L350 45" stroke="#333" stroke-width="2" fill="none" vector-effect="non-scaling-stroke" />
+  <!-- k -->
+  <path id="line-36" d="M385 15 L385 45" stroke="#333" stroke-width="2" fill="none" vector-effect="non-scaling-stroke" />
+  <path id="line-37" d="M385 35 L400 25" stroke="#333" stroke-width="2" fill="none" vector-effect="non-scaling-stroke" />
+  <path id="line-38" d="M385 35 L400 45" stroke="#333" stroke-width="2" fill="none" vector-effect="non-scaling-stroke" />
+</svg>

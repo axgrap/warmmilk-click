@@ -4,6 +4,8 @@ dist/
 # External projects checked out during CI
 external-projects/
 
+node_modules/
+
 # Python
 __pycache__/
 *.py[cod]

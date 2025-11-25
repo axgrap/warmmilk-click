@@ -1,0 +1,18 @@
+{
+  "name": "warmmilk-click",
+  "version": "1.0.0",
+  "description": "Temporal Project Views - Track and visualize project evolution over time",
+  "scripts": {
+    "dev": "live-server src --port=8080 --open=/index.html"
+  },
+  "keywords": [
+    "temporal",
+    "visualization",
+    "project-tracking"
+  ],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "live-server": "^1.2.2"
+  }
+}
