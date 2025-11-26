@@ -68,3 +68,160 @@ header {
   align-items: center;
   justify-content: center;
 }
+
+/* Timeline Styles */
+.timeline-container {
+  padding: 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.timeline-event {
+  background: white;
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 30px;
+  transition: all 0.3s ease;
+}
+
+.timeline-event:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.timeline-event.highlight {
+  background: #fffbea;
+  border-color: #f59e0b;
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2);
+}
+
+.commit-header {
+  margin-bottom: 15px;
+}
+
+.commit-meta {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+  font-size: 0.9em;
+  color: #666;
+}
+
+.commit-sha {
+  font-family: "Courier New", monospace;
+  background: #f3f4f6;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: bold;
+  color: #374151;
+}
+
+.commit-author {
+  color: #2563eb;
+  font-weight: 500;
+}
+
+.commit-date {
+  color: #6b7280;
+}
+
+.commit-project {
+  color: #059669;
+  font-weight: 500;
+  background: #d1fae5;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.commit-message {
+  font-size: 1.1em;
+  color: var(--text-color);
+  line-height: 1.5;
+  font-weight: 500;
+}
+
+.commit-files {
+  margin-bottom: 15px;
+  padding: 10px;
+  background: #f9fafb;
+  border-radius: 4px;
+  font-size: 0.9em;
+}
+
+.commit-files code {
+  background: #e5e7eb;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 0.85em;
+  margin: 0 2px;
+}
+
+.commit-lines {
+  margin-top: 15px;
+  border-top: 1px solid #e5e7eb;
+  padding-top: 15px;
+}
+
+.lines-header {
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 10px;
+  font-size: 0.95em;
+}
+
+.blame-line {
+  display: flex;
+  gap: 10px;
+  padding: 6px 10px;
+  margin: 4px 0;
+  background: #f9fafb;
+  border-left: 3px solid #d1d5db;
+  border-radius: 4px;
+  font-family: "Courier New", monospace;
+  font-size: 0.85em;
+  transition: all 0.2s ease;
+}
+
+.blame-line.line-clickable {
+  cursor: pointer;
+  border-left-color: #3b82f6;
+}
+
+.blame-line.line-clickable:hover {
+  background: #eff6ff;
+  border-left-color: #2563eb;
+  transform: translateX(5px);
+}
+
+.blame-line.line-clickable::after {
+  content: "↑";
+  margin-left: auto;
+  color: #3b82f6;
+  font-weight: bold;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.blame-line.line-clickable:hover::after {
+  opacity: 1;
+}
+
+.line-number {
+  color: #6b7280;
+  min-width: 40px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.line-content {
+  color: #1f2937;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.content-area {
+  margin-left: var(--nav-width);
+  min-height: 100vh;
+}

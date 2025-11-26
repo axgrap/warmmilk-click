@@ -65,11 +65,11 @@ jobs:
                       
                       print(f"Checking out {repository} as {name}...")
                       
-                      # Clone the repository
+                      # Clone the repository with full history
                       clone_cmd = ['git', 'clone']
                       if branch:
                           clone_cmd.extend(['--branch', branch])
-                      clone_cmd.extend(['--depth', '0'])  # Full history for temporal data
+                      # Omit --depth to get full history for temporal data
                       clone_cmd.append(f'https://github.com/{repository}.git')
                       clone_cmd.append(f'external-projects/{name}')
                       
@@ -95,6 +95,7 @@ jobs:
           cp src/morph.js dist/morph.js
           cp src/boiler.js dist/boiler.js
           cp src/warmmilk-click-client.js dist/warmmilk-click-client.js
+          cp src/click-implementation.js dist/click-implementation.js
           cp -r src/svg dist/
 
       - name: Upload artifact
