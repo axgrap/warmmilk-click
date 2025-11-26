@@ -98,6 +98,14 @@ jobs:
           cp src/warmmilk-click-client.js dist/warmmilk-click-client.js
           cp src/click-implementation.js dist/click-implementation.js
           cp -r src/svg dist/
+          touch dist/.nojekyll
+
+      - name: List dist contents
+        run: |
+          echo "Contents of dist directory:"
+          ls -la dist/
+          echo "Checking if index.html exists:"
+          cat dist/index.html | head -20
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
