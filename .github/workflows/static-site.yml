@@ -86,6 +86,7 @@ jobs:
 
       - name: Generate temporal data
         run: |
+          mkdir -p dist
           python scripts/generate-temporal-data.py . dist/temporal-data.json
 
       - name: Copy site files
