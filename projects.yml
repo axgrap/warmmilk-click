@@ -1,10 +1,6 @@
 # Configuration for external project repositories
 # Each project is a separate git repository that will be checked out during the build
 projects:
-  - name: warmmilk-click
-    repository: axgrap/warmmilk-click
-    branch: main
-
   - name: git-kanban
     repository: axgrap/git-kanban
     branch: main

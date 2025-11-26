@@ -329,11 +329,23 @@ def find_projects(repo_path: str) -> List[str]:
     """Find all projects (directories containing click.md files)."""
     projects = []
     
+    def has_click_md(files):
+        """Check if any file in the list is click.md (case insensitive)."""
+        return any(f.lower() == "click.md" for f in files)
+    
+    def find_click_md(directory):
+        """Find the actual click.md filename (with original case) in a directory."""
+        if os.path.isdir(directory):
+            for f in os.listdir(directory):
+                if f.lower() == "click.md" and os.path.isfile(os.path.join(directory, f)):
+                    return f
+        return None
+    
     # Look for click.md files in the projects directory (local projects)
     projects_dir = os.path.join(repo_path, "projects")
     if os.path.exists(projects_dir):
         for root, dirs, files in os.walk(projects_dir):
-            if "click.md" in files:
+            if has_click_md(files):
                 # Get the relative path from repo root
                 rel_path = os.path.relpath(root, repo_path)
                 projects.append(rel_path)
@@ -346,14 +358,14 @@ def find_projects(repo_path: str) -> List[str]:
             project_path = os.path.join(external_projects_dir, project_name)
             if os.path.isdir(project_path):
                 # Look for click.md in the root of the external project
-                click_file = os.path.join(project_path, "click.md")
-                if os.path.exists(click_file):
+                click_filename = find_click_md(project_path)
+                if click_filename:
                     rel_path = os.path.relpath(project_path, repo_path)
                     projects.append(rel_path)
                 else:
                     # Also search subdirectories of external project
                     for root, dirs, files in os.walk(project_path):
-                        if "click.md" in files:
+                        if has_click_md(files):
                             rel_path = os.path.relpath(root, repo_path)
                             projects.append(rel_path)
                             break  # Only take the first click.md found in each external project
@@ -380,7 +392,20 @@ def generate_temporal_data(repo_path: str, output_file: str) -> None:
     
     for project_path in project_paths:
         project_name = os.path.basename(project_path)
-        click_file_path = os.path.join(project_path, "click.md")
+        
+        # Find the actual click.md filename (case insensitive)
+        project_full_path = os.path.join(repo_path, project_path)
+        click_filename = None
+        for f in os.listdir(project_full_path):
+            if f.lower() == "click.md" and os.path.isfile(os.path.join(project_full_path, f)):
+                click_filename = f
+                break
+        
+        if not click_filename:
+            print(f"Warning: click.md not found in {project_path}")
+            continue
+            
+        click_file_path = os.path.join(project_path, click_filename)
         
         print(f"\nProcessing project: {project_name}")
         
@@ -392,7 +417,7 @@ def generate_temporal_data(repo_path: str, output_file: str) -> None:
         if is_external:
             project_git_root = os.path.join(repo_path, project_path)
             # click.md path relative to the external project root
-            click_file_rel_path = "click.md"
+            click_file_rel_path = click_filename
         else:
             project_git_root = repo_path
             click_file_rel_path = click_file_path
